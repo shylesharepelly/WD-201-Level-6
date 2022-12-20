@@ -60,6 +60,7 @@ describe("Todo Application", function () {
       .put(`/todos/${latestTodo.id}`)
       .send({
         _csrf: csrfToken,
+        completed:false,
       });
 
     const parsedUpdateResponse = JSON.parse(markCompleteResponse.text);
