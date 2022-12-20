@@ -51,7 +51,22 @@ describe("Todo Application", function () {
     const parsedResponse = await agent .get("/") .set("Accept", "application/json");
     const parsedResponse1 = JSON.parse(parsedResponse.text);
     const dueTodayCount = parsedResponse1.dueToday.length;
-    const presentTodo = parsedResponse1.dueToday[dueTodayCount - 1];
+    const latestTodo = parsedResponse1.dueToday[dueTodayCount - 1];
+
+    res = await agent.get("/");
+    csrfToken = extractCsrfToken(res);
+
+    const markCompleteResponse = await agent
+      .put(`/todos/${latestTodo.id}`)
+      .send({
+        _csrf: csrfToken,
+      });
+
+    const parsedUpdateResponse = JSON.parse(markCompleteResponse.text);
+    expect(parsedUpdateResponse.completed).toBe(false);
+
+
+
   });
 
   test("Mark a todo as incomplete", async () => {
@@ -66,7 +81,25 @@ describe("Todo Application", function () {
     const parsedResponse = await agent .get("/") .set("Accept", "application/json");
   const parsedResponse1 = JSON.parse(parsedResponse.text);
   const dueTodayCount = parsedResponse1.dueToday.length;
-  const presentTodo = parsedResponse1.dueToday[dueTodayCount - 1]; 
+  const latestTodo = parsedResponse1.dueToday[dueTodayCount - 1]; 
+
+
+
+  res = await agent.get("/");
+  csrfToken = extractCsrfToken(res);
+
+  const markCompleteResponse = await agent
+    .put(`/todos/${latestTodo.id}`)
+    .send({
+      _csrf: csrfToken,
+      completed: true,
+    });
+
+  const UpdateResponse = JSON.parse(markCompleteResponse.text);
+  expect(UpdateResponse.completed).toBe(true);
+
+
+
   });
 
   test("Deletes a todo with the given ID if it exists and sends a boolean response", async () => {
@@ -83,11 +116,14 @@ describe("Todo Application", function () {
     expect(parsedResponse1.dueToday).toBeDefined();
     const dueTodayCount = parsedResponse1.dueToday.length;
     const presentTodo = parsedResponse1.dueToday[dueTodayCount - 1];
+
     res = await agent.get("/");
     csrfToken = extractCsrfToken(res);
     const deleted = await agent.delete(`/todos/${presentTodo.id}`).send({
       _csrf: csrfToken,
     });
-    expect(deleted.statusCode).toBe(200);
+    const DeletedResponse1 = JSON.parse(deleted.text);
+
+    expect(DeletedResponse1).toBe(true);
   });
 });

@@ -83,7 +83,7 @@ app.put("/todos/:id", async (request, response) => {
 app.delete("/todos/:id", async (request, response) =>{
   try{
     await Todo.remove(request.params.id);
-    return response.json( {success:true});
+    return response.json(true);
   }
   catch (error) {
     console.log(error);
