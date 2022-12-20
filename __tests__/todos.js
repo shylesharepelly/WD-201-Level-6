@@ -76,7 +76,6 @@ describe("Todo Application", function () {
       _csrf: csrfToken,
       title: "speaking skills",
       dueDate: new Date().toISOString(),
-      completed: false,
     });
 
     const parsedResponse = await agent .get("/") .set("Accept", "application/json");
