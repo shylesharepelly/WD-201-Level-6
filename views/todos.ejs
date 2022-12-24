@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<%= csrfToken %>" />
+    <link href="./css/styles.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title><%= title %></title>
+    
+</head>
+<body>
+    <div class="grid grid-cols-6">
+        <div class="col-start-3 col-span-2">
+            <%- include('header.ejs') %>
+            <a href="/signout">Signout</a>
+            <form action="/todos" method="post" onsubmit="validate()">
+              <input type="hidden" name="_csrf" value="<%=csrfToken %>" />
+                <div class="flex gap-2 p-4">
+                    <div class="flex-auto">
+                        <input type="text" title="Enter atleast 2 characters.Remove space in the beginning" pattern="([^\s][A-z0-9À-ž\s]+)" name="title" placeholder="whats next?" class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm" required/>
+                    </div>
+                
+                <div class="flex-auto " >
+                    <input type="date" name="dueDate" class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm leading-4" required/>
+                </div>
+                <div class="flex-none">
+                    <button type="submit"   class="bg-green-600 text-white px-5 py-2 rounded font-medium py-1.5">Add</button>
+                </div>
+            </div>
+        </form>
+        <div>
+          <%- include('todo.ejs', {title: "Overdue" , data: overdue}) %>
+          <%- include('todo.ejs', {title: "Due Today" , data: dueToday}) %>
+          <%- include('todo.ejs', {title: "Due Later" , data: dueLater}) %>
+          <%- include('todo.ejs', {title: "Completed items" , data: completed}) %>
+        </div>
+        
+        
+    </div>
+   
+
+    
+</body>
+</html>

@@ -53,27 +53,10 @@
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-2">
             <%- include('header.ejs') %>
-            <form action="/todos" method="post" onsubmit="validate()">
-              <input type="hidden" name="_csrf" value="<%=csrfToken %>" />
-                <div class="flex gap-2 p-4">
-                    <div class="flex-auto">
-                        <input type="text" title="Enter atleast 2 characters.Remove space in the beginning" pattern="([^\s][A-z0-9À-ž\s]+)" name="title" placeholder="whats next?" class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm" required/>
-                    </div>
-                
-                <div class="flex-auto " >
-                    <input type="date" name="dueDate" class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm leading-4" required/>
-                </div>
-                <div class="flex-none">
-                    <button type="submit"   class="bg-green-600 text-white px-5 py-2 rounded font-medium py-1.5">Add</button>
-                </div>
-            </div>
-        </form>
-        <div>
-          <%- include('todo.ejs', {title: "Overdue" , data: overdue}) %>
-          <%- include('todo.ejs', {title: "Due Today" , data: dueToday}) %>
-          <%- include('todo.ejs', {title: "Due Later" , data: dueLater}) %>
-          <%- include('todo.ejs', {title: "Completed items" , data: completed}) %>
-        </div>
+            <p class="py-2">Welcome to the To-Do manager</p>
+            <p class="py-2">new here?<a href="/signup" class="text-green-600">Sign-up now</a></p>
+            <p class="py-2">Already have an account?<a href="/login" class="text-green-600">Sign-in</a></p>
+          
         
         
     </div>
