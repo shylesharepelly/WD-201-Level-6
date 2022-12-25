@@ -10,59 +10,68 @@ module.exports = (sequelize, DataTypes) => {
       })
     }
 
-    static addTodo({ title, dueDate }) {
-      return this.create({ title: title, dueDate: dueDate, completed: false });
+    static addTodo({ title, dueDate ,userId}) {
+      return this.create({ title: title, dueDate: dueDate, completed: false, userId });
     }
-    static async overdue() {
+    static async overdue(userId) {
       return this.findAll({
         where: {
           dueDate: {
             [Op.lt]: new Date(),
           },
+          userId,
           completed: false,
         },
       });
     }
 
-    static async dueLater() {
+    static async dueLater(userId) {
       return this.findAll({
         where: {
           dueDate: {
             [Op.gt]: new Date(),
           },
+          userId,
           completed: false,
         },
       });
     }
 
-    static async dueToday() {
+    static async dueToday(userId) {
       return this.findAll({
         where: {
           dueDate: {
             [Op.eq]: new Date(),
           },
+          userId,
           completed: false,
         },
       });
     }
-    static async remove(id) {
+    static async remove(id,userId) {
       return this.destroy({
         where: {
           id,
+          userId
         },
       });
     }
-    static async completed() {
+    static async completed(userId) {
       return this.findAll({
         where: {
           completed: true,
+          userId
         },
       });
     }
 
-    static getTodos()
+    static getTodos(userId)
     {
-      return this.findAll();
+      return this.findAll({
+        where:{
+          userId,
+        },
+      });
     }
     setCompletionStatus(completed) {
       return this.update({ completed});
@@ -70,9 +79,17 @@ module.exports = (sequelize, DataTypes) => {
   }
   Todo.init(
     {
-      title: DataTypes.STRING,
-      dueDate: DataTypes.DATEONLY,
-      completed: DataTypes.BOOLEAN,
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+     }, dueDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+    },
+    completed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
     },
     {
       sequelize,

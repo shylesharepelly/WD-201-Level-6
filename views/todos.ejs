@@ -8,6 +8,46 @@
     <link href="./css/styles.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <title><%= title %></title>
+    <script>
+      
+        var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        
+        function updateTodo(id,status) {
+          const bool = document.querySelector(`#todo-checkbox-${id}`).checked
+          fetch(`/todos/${id}`, {
+            method: 'put',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              completed: status,
+              "_csrf": token,
+         
+          
+        })
+          }).then((res) => {
+            if(res.ok)
+            {
+              window.location.reload();
+            }
+          
+          }).catch(err => console.error(err))
+        }
+        function deleteTodo(id) {
+          console.log(id);
+          fetch(`/todos/${id}`, {
+            method: 'delete',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({
+          //completed: true,
+          "_csrf": token
+        })
+          }).then((res) => {
+            if(res.ok)
+            {
+              window.location.reload();
+            }
+          }).catch(err => console.error(err))
+        }
+      </script>
     
 </head>
 <body>
@@ -15,6 +55,14 @@
         <div class="col-start-3 col-span-2">
             <%- include('header.ejs') %>
             <a href="/signout">Signout</a>
+            <div>
+              
+            <% if(messages && messages.error && messages.error.length > 0)  { %>
+              <% for(var i=0; i<messages.error.length; i++) { %>
+                      <li> <%= messages.error[i] %></li>
+              <% } %>
+            <% } %>
+            </div>
             <form action="/todos" method="post" onsubmit="validate()">
               <input type="hidden" name="_csrf" value="<%=csrfToken %>" />
                 <div class="flex gap-2 p-4">
@@ -30,6 +78,9 @@
                 </div>
             </div>
         </form>
+        <div>
+            
+        </div>
         <div>
           <%- include('todo.ejs', {title: "Overdue" , data: overdue}) %>
           <%- include('todo.ejs', {title: "Due Today" , data: dueToday}) %>

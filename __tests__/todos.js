@@ -17,7 +17,7 @@ const login=async(agent,username,password)=>{
   res=await agent.post("/session").send({
     email:username,
     password:password,
-    _csrf:csrfToken
+    _csrf:csrfToken,
   });
 };
 
@@ -42,7 +42,7 @@ describe("Todo Application", function () {
     const csrfToken = extractCsrfToken(res);
     const res1 = await agent.post("/users").send({
       firstname:"Test",
-      lastName:"User A",
+      lastName:"UserA",
       email:"user.a@test.com",
       password:"12345678",
       _csrf:csrfToken,
@@ -76,7 +76,7 @@ describe("Todo Application", function () {
       title: "speaking skills",
       dueDate: new Date().toISOString(),
       completed: false,
-      _csrf:csrfToken,
+      _csrf: csrfToken,
     });
     const parsedResponse = await agent .get("/todos") .set("Accept", "application/json");
     const parsedResponse1 = JSON.parse(parsedResponse.text);
@@ -138,6 +138,7 @@ describe("Todo Application", function () {
     let csrfToken = extractCsrfToken(res);
     await agent.post("/todos").send({
       _csrf: csrfToken,
+      completed: false,
       title: "speaking skills",
       dueDate: new Date().toISOString(),
     });
